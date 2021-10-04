@@ -118,6 +118,27 @@ paths:
         '404':
           $ref: "common/common_errors.yml#/components/responses/NotFoundError"
 
+  /v1/10dlc/brands/{brand_id}/feedback:
+    get:
+      parameters:
+        - $ref: "#/components/parameters/BrandId"
+      tags:
+        - Brands
+      description: Retrieve feedback of a specific brand with Brand ID.
+      operationId: getBrandFeedback
+      summary: Get feedback of a brand by Brand ID.
+      responses:
+        '200':
+          $ref: '#/components/responses/BrandFeedbackResponse'
+        '400':
+          $ref: '#/components/responses/ErrorGeneric'
+        '401':
+          $ref: "common/common_errors.yml#/components/responses/BadCredentialsError"
+        '404':
+          $ref: "common/common_errors.yml#/components/responses/NotFoundError"
+        '429':
+          $ref: "common/common_errors.yml#/components/responses/ThrottledError"
+
   /v1/10dlc/brands/{brand_id}/usecases/{usecase}:
     parameters:
       - $ref: "#/components/parameters/BrandId"
@@ -213,6 +234,30 @@ paths:
           $ref: '#/components/responses/ErrorVettingParameters'
         '429':
           $ref: "common/common_errors.yml#/components/responses/ThrottledError"
+  
+  /v1/10dlc/brands/{brand_id}/revet:
+    parameters:
+      - $ref: "#/components/parameters/BrandId"
+    post:
+      tags:
+        - Brands
+      summary: Request a brand revetting
+      description: |
+        This operation allows you to revet the brand. However, revetting is
+        allowed once after the successful brand registration.
+      operationId: brandRevet
+      responses:
+        '200':
+          $ref: '#/components/responses/SingleBrand'
+        '401':
+          $ref: "common/common_errors.yml#/components/responses/BadCredentialsError"
+        '404':
+          $ref: "common/common_errors.yml#/components/responses/NotFoundError"
+        '422':
+          $ref: '#/components/responses/ErrorUnableToParseRequestResponse'
+        '429':
+          $ref: "common/common_errors.yml#/components/responses/ThrottledError"
+
 
   /v1/10dlc/brands/{brand_id}/campaigns:
     parameters:
@@ -335,10 +380,12 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/LinkNumber'
       responses:
-        '201':
-          $ref: '#/components/responses/NumberResponse'
         '202':
-          $ref: '#/components/responses/NumberResponse'
+          description: Accepted
+          content: 
+            application/json: 
+              schema:
+                $ref: '#/components/responses/NumberResponse'
         '401':
           $ref: "common/common_errors.yml#/components/responses/BadCredentialsError"
         '404':
@@ -443,6 +490,7 @@ components:
         display_name: "Vonage"
         company_name: "Vonage"
         ein: "20-1111111"
+        ein_issuing_country: "US"
         universal_ein: "20-1111111"
         alt_business_id_type: "DUNS"
         alt_business_id: "150483782"
@@ -1220,6 +1268,27 @@ components:
                             example:
                               $ref: '#/components/examples/LinkCampaign/value'
 
+    BrandFeedbackResponse:
+      description: Return feedback for a brand
+      content: 
+        application/json:
+          schema:
+            type: object
+            properties:
+              categories: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    fields:
+                      type: array
+                      items:
+                        type: string
+
     VettingClasses:
       description: List of vetting classes
       content:
@@ -1321,7 +1390,6 @@ components:
               - type: object
                 required:
                   - account_id
-                  - vertical
                   - usecase
                   - description
                   - subscriber_opt_in
@@ -1433,6 +1501,12 @@ components:
           description: (Required for Non-profit) Government assigned corporate tax ID. EIN is 9-digits in U.S.A.
           example:
             $ref: '#/components/examples/BrandVonage/value/ein'
+        ein_issuing_country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: ISO3166-Alpha2 country code.
+          example: 
+            $ref: '#/components/examples/BrandVonage/value/ein_issuing_country'
         universal_ein:
           type: string
           pattern: ^([0-9]{2}[-]?[0-9]{7})$|^([0-9]{3}[-]?[0-9]{2}[-]?[0-9]{4})$
@@ -1567,11 +1641,36 @@ components:
       description: Fields that are editable for a brand
       type: object
       properties:
+        company_name:
+          type: string
+          description: Legal company name.
+          example: 
+            $ref: '#/components/examples/BrandVonage/value/company_name'
         display_name:
           type: string
           description: Display or marketing name of the brand.
           example:
             $ref: '#/components/examples/BrandVonage/value/display_name'
+        ein:
+          type: string
+          description: >-
+            (Required for Non-profit) Government assigned corporate tax ID. EIN is
+            9-digits in U.S.A.
+          example:
+            $ref: '#/components/examples/BrandVonage/value/ein'
+        ein_issuing_country:
+          type: string
+          description: ISO3166-Alpha2 country code.
+          example:
+            $ref: '#/components/examples/BrandVonage/value/ein_issuing_country'
+        entity_type:
+          type: string
+          description: |
+            Entity type behind the brand.
+            This is the form of business establishment.
+            Please refer to the /enum endpoint for an update list of valid values.
+          example: 
+            $ref: '#/components/examples/BrandVonage/value/entity_type'
         website:
           type: string
           description: Brand website URL.
@@ -1677,13 +1776,6 @@ components:
         owner:
           description: True when the brand is owned by the requesting account.
           type: boolean
-        registration_score:
-          description: >-
-            Brand score assigned by the registry. This score is supplanted by
-            external vetting score if present.
-          type: integer
-          format: int32
-          readOnly: true
         status:
           description: Brand status.
           type: string
@@ -1749,7 +1841,10 @@ components:
           $ref: "#/components/schemas/AccountID"
         vertical:
           type: string
-          description: Business/industry segment of this campaign
+          description: Business/industry segment of this campaign. (Required if entity_type !=
+            SOLE_PROPRIETOR). Please refer to the /enum endpoint for an update list
+            of valid values.
+          maxLength: 50
           enum:
             - UNKNOWN
             - REAL_ESTATE
@@ -2067,7 +2162,6 @@ components:
             - state
             - postal_code
             - country
-            - vertical
 
     CreatePrivateCompanyBrand:
       allOf:
@@ -2090,7 +2184,6 @@ components:
             - state
             - postal_code
             - country
-            - vertical
             - website
 
     CreatePublicCompanyBrand:
@@ -2117,7 +2210,6 @@ components:
             - state
             - postal_code
             - country
-            - vertical
 
     ErrorCouldNotRemoveNumber:
       allOf:
@@ -2215,6 +2307,7 @@ components:
       description: Current status of a number in a campaign
       example: APPROVED
       enum:
+        - UNKNOWN
         - APPROVED
         - REJECTED
         - PENDING
@@ -2229,7 +2322,8 @@ components:
     UpdateNonProfitBrand:
       type: object
       properties:
-        $ref: '#/components/schemas/BrandEditableFields/properties'
+        allOf:
+          $ref: '#/components/schemas/BrandEditableFields'
       required:
         - entity_type
         - display_name
@@ -2242,7 +2336,8 @@ components:
     UpdatePrivateCompanyBrand:
       type: object
       properties:
-        $ref: '#/components/schemas/BrandEditableFields/properties'
+        allOf:
+          $ref: '#/components/schemas/BrandEditableFields'
       required:
         - entity_type
         - display_name
@@ -2254,7 +2349,8 @@ components:
     UpdatePublicCompanyBrand:
       type: object
       properties:
-        $ref: '#/components/schemas/BrandEditableFields/properties'
+        allOf:
+          $ref: '#/components/schemas/BrandEditableFields'
       required:
         - entity_type
         - display_name
@@ -2264,6 +2360,28 @@ components:
         - stock_symbol
         - stock_exchange
         - website
+
+    IdentityStatus:
+      description: >-
+        The 4 statuses are defined as follow:
+        * __SELF_DECLARED__ - This is for sole proprietors that are declaring
+        information about their identity. Their identity is not validated by
+        TCR.
+        * __UNVERIFIED__ - For brands that register with TCR, but due to
+        incorrect or incomplete information, TCR is unable to verify the brand
+        identity. Brands can move from unverified to verified by updating their
+        information and going through the verification process again.
+        * __VERIFIED__ - The brand was registered with TCR and TCR is able to
+        successfully verify the brand information.
+        * __VETTED_VERIFIED__ - Brand with an external STANDARD class vet. A
+        VETTED_VERIFIED brand may potentially gain access to higher throughput
+        and additional use-cases across some MNO networks.
+      type: string
+      enum:
+        - SELF_DECLARED
+        - UNVERIFIED
+        - VERIFIED 
+        - VETTED_VERIFIED 
 
     UseCase:
       description: Use Cases for Campaigns

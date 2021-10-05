@@ -231,6 +231,9 @@ paths:
                       description: "Messages and Dispatch application webhook config"
                       x-nexmo-developer-collection-description-shown: true
                       properties:
+                        version:
+                          type: string
+                          description: "If not populated will be v0.1"
                         webhooks:
                           type: object
                           properties:

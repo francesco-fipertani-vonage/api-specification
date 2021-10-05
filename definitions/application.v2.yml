@@ -233,7 +233,7 @@ paths:
                       properties:
                         version:
                           type: string
-                          description: "If not populated will be v0.1"
+                          description: "If not populated will be set to v1"
                         webhooks:
                           type: object
                           properties:

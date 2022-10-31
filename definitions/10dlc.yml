@@ -1,7 +1,7 @@
 openapi: 3.0.3
 
 info:
-  version: 1.0.9
+  version: 1.0.10
   title: 10DLC Brand and Campaign Provisioning
   contact:
     name: Vonage
@@ -2935,3 +2935,15 @@ x-errors:
   invalid-number-data:
     description: There are errors in the number data submitted.
     resolution: Ensure all required fields have values and correct any errors to values in the specified fields.
+
+  illegal-sender-address:
+    description: The number you are trying to send from is not a US-approved long number or a Vonage number.
+    resolution: Check to ensure the number matches the one from your Vonage dashboard.
+
+  submission-throttled:
+    description: Submission Control throttled due to max volume reached for this period.
+    resolution: Once the number of requests drops from its current high, the quota per period will be restored.
+
+  daily-submission-throttled:
+    description: Daily Limit Surpassed - Submission Control throttled due to max volume reached for this period
+    resolution: Once the number of requests drops from its current high, the quota per period will be restored.

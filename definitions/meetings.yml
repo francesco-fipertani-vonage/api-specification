@@ -90,14 +90,6 @@ paths:
                 $ref: '#/components/schemas/Room'
         '404':
           description: Room not found
-    delete:
-      summary: Delete a room
-      operationId: deleteRoom
-      responses:
-        '204':
-          description: OK
-        '404':
-          description: Room not found
     patch:
        summary: Update an existing room
        operationId: updateRoom

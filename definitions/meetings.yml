@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Vonage Meetings Public API
-  version: 0.1.2
+  version: 0.1.3
   x-label: Beta
 servers:
   - url: https://api-eu.vonage.com/beta/meetings
@@ -122,6 +122,8 @@ paths:
                       type: string
                       format: uuid
                       description: 'The theme id for the room'
+                    join_approval_level:
+                      $ref: '#/components/schemas/JoinApprovalLevel'
        responses:
         '200':
           description: OK
@@ -739,6 +741,8 @@ components:
         expire_after_use:
           type: boolean
           description: 'Close the room after a session ends. Only relevant for long_term rooms.'
+        join_approval_level:
+          $ref: '#/components/schemas/JoinApprovalLevel'
         _links:
           type: object
           properties:
@@ -783,6 +787,8 @@ components:
           type: string
           format: uuid
           description: 'The theme id for the room'
+        join_approval_level:
+          $ref: '#/components/schemas/JoinApprovalLevel'
     RecordingOptions:
       type: object
       properties:
@@ -993,4 +999,11 @@ components:
           type: string
           format: uuid
           description: The theme id to set as application default theme
+    JoinApprovalLevel:
+      type: string
+      enum:
+        - none
+        - after_owner_only
+        - explicit_approval
+      description: The level of approval needed to join the meeting in the room. When set to "after_owner_only" the participants will join the meeting only after the host joined. When set to "explicit_approval" the participants will join the waiting room and the host will deny/approve them.
 tags: []

@@ -209,6 +209,13 @@ paths:
                       description: "RTC / Client SDK application webhook config"
                       x-nexmo-developer-collection-description-shown: true
                       properties:
+                        signed_callbacks:
+                          type: boolean
+                        leg_persistence_time:
+                          maximum: 31
+                          minimum: 1
+                          type: integer
+                          format: int32
                         webhooks:
                           type: object
                           properties:

@@ -1,6 +1,6 @@
 openapi: "3.0.1"
 info:
-  version: 1.2.3
+  version: 1.3.0
   title: Messages API
   description: 'The Messages API consolidates and normalises exchanges across all messaging channels. It allows you to use a single API to interact with our various channels such as SMS, MMS, WhatsApp, Viber and Facebook Messenger'
   contact:
@@ -507,6 +507,9 @@ x-webhooks:
                         - $ref: "#/components/schemas/Reply"
                       - allOf:
                         - $ref: "#/components/schemas/inboundWhatsAppMessageCommon"
+                        - $ref: "#/components/schemas/Order"
+                      - allOf:
+                        - $ref: "#/components/schemas/inboundWhatsAppMessageCommon"
                         - $ref: "#/components/schemas/Unsupported"
                   - title: Messenger
                     x-tab-id: Messenger
@@ -790,6 +793,52 @@ components:
                   type: string
                   example: "Select 9am appointmaent time"
                   description: A description that may be added to the interactive options presented (available only on interactive lists).
+    Order:
+      allOf:
+        - $ref: "#/components/schemas/baseMessageType"
+        - title: Order
+          x-tab-id: Order
+          type: object
+          required:
+            - order
+          properties:
+            message_type:
+              type: string
+              enum:
+                - order
+              example: order
+              description: The type of message to send.
+            order:
+              required:
+                - catalog_id
+                - product_items
+              type: object
+              properties:
+                catalog_id:
+                  type: string
+                  example: "2806150799683508"
+                  description: 'The ID of the catalog containing the products in this order.'
+                product_items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_retailer_id:
+                        type: string
+                        example: "pk1v7rudbg"
+                        description: 'The ID of the specific product being ordered.'
+                      quantity:
+                        type: string
+                        example: "1"
+                        description: 'The quantity ordered for this specific item.'
+                      item_price:
+                        type: string
+                        example: "9.99"
+                        description: 'The unit price for this specific item.'
+                      currency:
+                        type: string
+                        example: "USD"
+                        description: 'The currency code representing the currency for this specific item.'
     Text:
       allOf:
         - $ref: "#/components/schemas/baseMessageType"
@@ -1603,7 +1652,9 @@ components:
           example: Jane Smith
     Context:
       type: object
-      description: This is only present for the Inbound Message where the user is quoting another message. It provides information about the quoted message. 
+      description: |
+        This is only present for the Inbound Message where the user is quoting another message, or for a `product` message where the user has selected the 'Message Business' 
+        option. It provides information about the quoted message and/or the product message being responded to. 
       required:
         - message_uuid
         - message_from
@@ -1611,11 +1662,27 @@ components:
         message_uuid:
           type: string
           example: aaaaaaaa-bbbb-cccc-dddd-0123456789ab
-          description: The UUID of the message being replied to
+          description: The UUID of the message being quoted. Not present in a `context` object which is the result of a user selecting 'Message Business' in a `product` message.
         message_from:
           type: string
           example: '447700900000'
-          description: The phone number of the **original sender** of the message being replied to in the [E.164](https://en.wikipedia.org/wiki/E.164) format.
+          description: The phone number of the **original sender** of the message being quoted in the [E.164](https://en.wikipedia.org/wiki/E.164) format. Not present in a `context` object which is the result of a user selecting 'Message Business' in a `product` message.
+        whatsapp_referred_product:
+          type: object
+          description: |
+            An object containing details of a product from a `product` message being quoted or replied to using the 'Message Business' option.
+          required:
+            - catalog_id
+            - product_retailer_id
+          properties:
+            catalog_id:
+              type: string
+              example: '1267260820787549'
+              description: The ID of the catalog associated with the product from the `product` message being quoted or replied to using the 'Message Business' option.
+            product_retailer_id: 
+              type: string
+              example: 'r07qei73l7'
+              description: The ID of the product from the `product` message being quoted or replied to using the 'Message Business' option.
     Usage:
       type: object
       properties:

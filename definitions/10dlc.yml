@@ -1,7 +1,7 @@
 openapi: 3.0.3
 
 info:
-  version: 1.0.11
+  version: 1.0.12
   title: 10DLC Brand and Campaign Provisioning
   contact:
     name: Vonage
@@ -2150,30 +2150,6 @@ components:
           maxLength: 255
           example:
             $ref: "#/components/examples/Campaign/value/opt_out_message"
-        opt_in_keywords:
-          description: |
-            Opt in keywords for the campaign, separated by commas(,).
-          type: string
-          maxLength: 255
-          example:
-            $ref: "#/components/examples/Campaign/value/opt_in_keywords"
-        opt_out_keywords:
-          description: |
-            Opt out keywords for the campaign, separated by commas(,).
-          type: string
-          maxLength: 255
-          default: STOP
-          example:
-            $ref: "#/components/examples/Campaign/value/opt_out_keywords"
-        help_keywords:
-          description: |
-            Help keywords for the campaign, separated by commas(,).
-          type: string
-          minLength: 20
-          maxLength: 255
-          default: HELP
-          example:
-            $ref: "#/components/examples/Campaign/value/help_keywords"
 
     CampaignEditableFields:
       description: Fields that are editable for a campaign
@@ -2219,6 +2195,30 @@ components:
           type: boolean
           example:
             $ref: "#/components/examples/Campaign/value/auto_renewal"
+        opt_in_keywords:
+          description: |
+            Opt in keywords for the campaign, separated by commas(,).
+          type: string
+          maxLength: 255
+          example:
+            $ref: "#/components/examples/Campaign/value/opt_in_keywords"
+        opt_out_keywords:
+          description: |
+            Opt out keywords for the campaign, separated by commas(,).
+          type: string
+          maxLength: 255
+          default: STOP
+          example:
+            $ref: "#/components/examples/Campaign/value/opt_out_keywords"
+        help_keywords:
+          description: |
+            Help keywords for the campaign, separated by commas(,).
+          type: string
+          minLength: 20
+          maxLength: 255
+          default: HELP
+          example:
+            $ref: "#/components/examples/Campaign/value/help_keywords"
 
     CampaignSystemFields:
       description: Fields that are added by the system for a campaign

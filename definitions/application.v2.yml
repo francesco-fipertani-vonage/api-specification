@@ -106,174 +106,7 @@ paths:
                         -----END PUBLIC KEY-----
                       description: Public key
                 capabilities:
-                  type: object
-                  description: "Your application can use multiple products. This contains the configuration for each product. This replaces the application `type` from version 1 of the Application API."
-                  x-nexmo-developer-collection-description-shown: true
-                  properties:
-                    voice:
-                      type: object
-                      description: "Voice application webhook config"
-                      x-nexmo-developer-collection-description-shown: true
-                      properties:
-                        webhooks:
-                          type: object
-                          properties:
-                            answer_url:
-                              type: object
-                              description: "The URL that Vonage makes a request to when a call is placed/received. Must return an NCCO"
-                              x-nexmo-developer-collection-description-shown: true
-                              properties:
-                                address:
-                                  type: string
-                                  example: https://example.com/webhooks/answer
-                                http_method:
-                                  type: string
-                                  example: GET
-                                  enum:
-                                    - GET
-                                    - POST
-                                connection_timeout:
-                                  type: integer
-                                  description: If Vonage can't connect to the webhook URL for this specified amount of time, then Vonage makes one additional attempt to connect to the webhook endpoint. This is an integer value specified in milliseconds.
-                                  example: 500
-                                  default: 1000
-                                  maximum: 1000
-                                  minimum: 300
-                                socket_timeout:
-                                  type: integer
-                                  description: If a response from the webhook URL can't be read for this specified amount of time, then Vonage makes one additional attempt to read the webhook endpoint. This is an integer value specified in milliseconds.
-                                  example: 3000
-                                  default: 5000
-                                  maximum: 5000
-                                  minimum: 1000
-                            fallback_answer_url:
-                              type: object
-                              description: |
-                                If your `answer_url` is offline or returns a HTTP error code, Vonage will make a request to a
-                                `fallback_answer_url` if it is set. This URL must return an NCCO.
-                              x-nexmo-developer-collection-description-shown: true
-                              properties:
-                                address:
-                                  type: string
-                                  example: https://fallback.example.com/webhooks/answer
-                                http_method:
-                                  type: string
-                                  example: GET
-                                  enum:
-                                    - GET
-                                    - POST
-                                connection_timeout:
-                                  type: integer
-                                  description: If Vonage can't connect to the webhook URL for this specified amount of time, then Vonage makes one additional attempt to connect to the webhook endpoint. This is an integer value specified in milliseconds.
-                                  example: 500
-                                  default: 1000
-                                  maximum: 1000
-                                  minimum: 300
-                                socket_timeout:
-                                  type: integer
-                                  description: If a response from the webhook URL can't be read for this specified amount of time, then Vonage makes one additional attempt to read the webhook endpoint. This is an integer value specified in milliseconds.
-                                  example: 3000
-                                  default: 5000
-                                  maximum: 5000
-                                  minimum: 1000
-                            event_url:
-                              type: object
-                              description: "Vonage will send call events (e.g. `ringing`, `answered`) to this URL"
-                              x-nexmo-developer-collection-description-shown: true
-                              properties:
-                                address:
-                                  type: string
-                                  example: https://example.com/webhooks/event
-                                http_method:
-                                  type: string
-                                  example: POST
-                                  enum:
-                                    - GET
-                                    - POST
-                                connection_timeout:
-                                  type: integer
-                                  description: If Vonage can't connect to the webhook URL for this specified amount of time, then Vonage makes one additional attempt to connect to the webhook endpoint. This is an integer value specified in milliseconds.
-                                  example: 500
-                                  default: 1000
-                                  maximum: 1000
-                                  minimum: 300
-                                socket_timeout:
-                                  type: integer
-                                  description: If a response from the webhook URL can't be read for this specified amount of time, then Vonage makes one additional attempt to read the webhook endpoint. This is an integer value specified in milliseconds.
-                                  example: 3000
-                                  default: 10000
-                                  maximum: 10000
-                                  minimum: 1000
-                    rtc:
-                      type: object
-                      description: "RTC / Client SDK application webhook config"
-                      x-nexmo-developer-collection-description-shown: true
-                      properties:
-                        signed_callbacks:
-                          type: boolean
-                        leg_persistence_time:
-                          maximum: 31
-                          minimum: 1
-                          type: integer
-                          format: int32
-                        webhooks:
-                          type: object
-                          properties:
-                            event_url:
-                              type: object
-                              description: "Vonage will send RTC events to this URL"
-                              x-nexmo-developer-collection-description-shown: true
-                              properties:
-                                address:
-                                  type: string
-                                  example: https://example.com/webhooks/event
-                                http_method:
-                                  type: string
-                                  example: POST
-                                  enum:
-                                    - GET
-                                    - POST
-                    messages:
-                      type: object
-                      description: "Messages and Dispatch application webhook config"
-                      x-nexmo-developer-collection-description-shown: true
-                      properties:
-                        version:
-                          type: string
-                          description: "If not populated will be set to v1"
-                        webhooks:
-                          type: object
-                          properties:
-                            inbound_url:
-                              type: object
-                              description: "Vonage will forward inbound messages to this URL"
-                              x-nexmo-developer-collection-description-shown: true
-                              properties:
-                                address:
-                                  type: string
-                                  example: https://example.com/webhooks/inbound
-                                http_method:
-                                  type: string
-                                  example: POST
-                                  enum:
-                                    - POST
-                            status_url:
-                              type: object
-                              description: "Vonage will send message status updates (e.g. `delivered`, `seen`) to this URL"
-                              x-nexmo-developer-collection-description-shown: true
-                              properties:
-                                address:
-                                  type: string
-                                  example: https://example.com/webhooks/status
-                                http_method:
-                                  type: string
-                                  example: POST
-                                  enum:
-                                    - POST
-                    vbc:
-                      type: object
-                      description: "Specify `vbc` capability to enable zero-rated calls for VBC number programmability service applications. This must be an empty object."
-                      x-nexmo-developer-collection-description-shown: true
+                  $ref: '#/components/schemas/capabilities'
                 privacy:
                   type: object
                   description: "Application privacy config"
@@ -393,164 +226,7 @@ paths:
                         -----END PUBLIC KEY-----
                       description: Public key
                 capabilities:
-                  type: object
-                  description: "Your application can use multiple products. This contains the configuration for each product. This replaces the application `type` from version 1 of the Application API."
-                  x-nexmo-developer-collection-description-shown: true
-                  properties:
-                    voice:
-                      type: object
-                      description: "Voice application webhook config"
-                      x-nexmo-developer-collection-description-shown: true
-                      properties:
-                        webhooks:
-                          type: object
-                          properties:
-                            answer_url:
-                              type: object
-                              description: "The URL that Vonage make a request to when a call is placed/received. Must return an NCCO"
-                              x-nexmo-developer-collection-description-shown: true
-                              properties:
-                                address:
-                                  type: string
-                                  example: https://example.com/webhooks/answer
-                                http_method:
-                                  type: string
-                                  example: GET
-                                  enum:
-                                    - GET
-                                    - POST
-                                connection_timeout:
-                                  type: integer
-                                  description: If Vonage can't connect to the webhook URL for this specified amount of time, then Vonage makes one additional attempt to connect to the webhook endpoint. This is an integer value specified in milliseconds.
-                                  example: 500
-                                  default: 1000
-                                  maximum: 1000
-                                  minimum: 300
-                                socket_timeout:
-                                  type: integer
-                                  description: If a response from the webhook URL can't be read for this specified amount of time, then Vonage makes one additional attempt to read the webhook endpoint. This is an integer value specified in milliseconds.
-                                  example: 3000
-                                  default: 5000
-                                  maximum: 5000
-                                  minimum: 1000
-                            fallback_answer_url:
-                              type: object
-                              description: |
-                                If your `answer_url` is offline or returns a HTTP error code, Vonage will make a request to a
-                                `fallback_answer_url` if it is set. This URL must return an NCCO
-                              x-nexmo-developer-collection-description-shown: true
-                              properties:
-                                address:
-                                  type: string
-                                  example: https://fallback.example.com/webhooks/answer
-                                http_method:
-                                  type: string
-                                  example: GET
-                                  enum:
-                                    - GET
-                                    - POST
-                                connection_timeout:
-                                  type: integer
-                                  description: If Vonage can't connect to the webhook URL for this specified amount of time, then Vonage makes one additional attempt to connect to the webhook endpoint. This is an integer value specified in milliseconds.
-                                  example: 500
-                                  default: 1000
-                                  maximum: 1000
-                                  minimum: 300
-                                socket_timeout:
-                                  type: integer
-                                  description: If a response from the webhook URL can't be read for this specified amount of time, then Vonage makes one additional attempt to read the webhook endpoint. This is an integer value specified in milliseconds.
-                                  example: 3000
-                                  default: 5000
-                                  maximum: 5000
-                                  minimum: 1000
-                            event_url:
-                              type: object
-                              description: "Vonage will send call events (e.g. `ringing`, `answered`) to this URL"
-                              x-nexmo-developer-collection-description-shown: true
-                              properties:
-                                address:
-                                  type: string
-                                  example: https://example.com/webhooks/event
-                                http_method:
-                                  type: string
-                                  example: POST
-                                  enum:
-                                    - GET
-                                    - POST
-                                connection_timeout:
-                                  type: integer
-                                  description: If Vonage can't connect to the webhook URL for this specified amount of time, then Vonage makes one additional attempt to connect to the webhook endpoint. This is an integer value specified in milliseconds.
-                                  example: 500
-                                  default: 1000
-                                  maximum: 1000
-                                  minimum: 300
-                                socket_timeout:
-                                  type: integer
-                                  description: If a response from the webhook URL can't be read for this specified amount of time, then Vonage makes one additional attempt to read the webhook endpoint. This is an integer value specified in milliseconds.
-                                  example: 3000
-                                  default: 10000
-                                  maximum: 10000
-                                  minimum: 1000
-                    rtc:
-                      type: object
-                      description: "RTC / Client SDK application webhook config"
-                      x-nexmo-developer-collection-description-shown: true
-                      properties:
-                        webhooks:
-                          type: object
-                          properties:
-                            event_url:
-                              type: object
-                              description: "Vonage will send RTC events to this URL"
-                              x-nexmo-developer-collection-description-shown: true
-                              properties:
-                                address:
-                                  type: string
-                                  example: https://example.com/webhooks/event
-                                http_method:
-                                  type: string
-                                  example: POST
-                                  enum:
-                                    - GET
-                                    - POST
-                    messages:
-                      type: object
-                      description: "Messages and Dispatch application webhook config"
-                      x-nexmo-developer-collection-description-shown: true
-                      properties:
-                        webhooks:
-                          type: object
-                          properties:
-                            inbound_url:
-                              type: object
-                              description: "Vonage will forward inbound messages to this URL"
-                              x-nexmo-developer-collection-description-shown: true
-                              properties:
-                                address:
-                                  type: string
-                                  example: https://example.com/webhooks/inbound
-                                http_method:
-                                  type: string
-                                  example: POST
-                                  enum:
-                                    - POST
-                            status_url:
-                              type: object
-                              description: "Vonage will send message status updates (e.g. `delivered`, `seen`) to this URL"
-                              x-nexmo-developer-collection-description-shown: true
-                              properties:
-                                address:
-                                  type: string
-                                  example: https://example.com/webhooks/status
-                                http_method:
-                                  type: string
-                                  example: POST
-                                  enum:
-                                    - POST
-                    vbc:
-                      type: object
-                      description: "Specify the `vbc` capability to enable zero-rated calls for VBC number programmability service applications.  This must be an empty object."
-                      x-nexmo-developer-collection-description-shown: true
+                  $ref: '#/components/schemas/capabilities'
                 privacy:
                   type: object
                   description: "Application privacy config"
@@ -699,123 +375,7 @@ components:
           example: My Application
           description: Friendly identifier for your application. This is not unique
         capabilities:
-          type: object
-          description: Configuration for the products available in this application
-          properties:
-            voice:
-              type: object
-              description: Voice related configuration
-              properties:
-                webhooks:
-                  type: object
-                  properties:
-                    answer_url:
-                      type: object
-                      properties:
-                        address:
-                          type: string
-                          example: https://example.com/webhooks/answer
-                          description: The URL that Vonage requests when a call is placed/received. Must return an NCCO
-                        http_method:
-                          type: string
-                          example: POST
-                          description: The HTTP method used to fetch your NCCO from your `answer_url`
-                        connection_timeout:
-                          type: integer
-                          description: If Vonage can't connect to the webhook URL for this specified amount of time, then Vonage makes one additional attempt to connect to the webhook endpoint. This is an integer value specified in milliseconds.
-                          example: 500
-                        socket_timeout:
-                          type: integer
-                          description: If a response from the webhook URL can't be read for this specified amount of time, then Vonage makes one additional attempt to read the webhook endpoint. This is an integer value specified in milliseconds.
-                          example: 3000
-                    fallback_answer_url:
-                      type: object
-                      properties:
-                        address:
-                          type: string
-                          example: https://fallback.example.com/webhooks/answer
-                          description: |
-                            If your `answer_url` is offline or returns a HTTP error code, Vonage will make a request to a
-                            `fallback_answer_url` if it is set. This URL must return an NCCO.
-                        http_method:
-                          type: string
-                          example: POST
-                          description: The HTTP method used to fetch your NCCO from your `answer_url`
-                        connection_timeout:
-                          type: integer
-                          description: Connection timeout in milliseconds
-                          example: 500
-                        socket_timeout:
-                          type: integer
-                          description: Reading timeout in milliseconds
-                          example: 3000
-                    event_url:
-                      type: object
-                      properties:
-                        address:
-                          type: string
-                          example: https://example.com/webhooks/event
-                          description: The URL that Vonage sends events related to your call to
-                        http_method:
-                          type: string
-                          example: POST
-                          description: The HTTP method used to send events to your server
-                        connection_timeout:
-                          type: integer
-                          description: If Vonage can't connect to the webhook URL for this specified amount of time, then Vonage makes one additional attempt to connect to the webhook endpoint. This is an integer value specified in milliseconds.
-                          example: 500
-                        socket_timeout:
-                          type: integer
-                          description: If a response from the webhook URL can't be read for this specified amount of time, then Vonage makes one additional attempt to read the webhook endpoint. This is an integer value specified in milliseconds.
-                          example: 3000
-            messages:
-              type: object
-              description: Messages / Dispatch related configuration
-              properties:
-                webhooks:
-                  type: object
-                  properties:
-                    inbound_url:
-                      type: object
-                      properties:
-                        address:
-                          type: string
-                          example: https://example.com/webhooks/inbound
-                          description: The URL that Vonage forwards inbound messages to on your server
-                        http_method:
-                          type: string
-                          example: POST
-                          description: The HTTP method used to send inbound messages to your server
-                    status_url:
-                      type: object
-                      properties:
-                        address:
-                          type: string
-                          example: https://example.com/webhooks/status
-                          description: The URL that Vonage sends events related to your messages to
-                        http_method:
-                          type: string
-                          example: POST
-                          description: The HTTP method used to send events to your server (always `POST`)
-            rtc:
-              type: object
-              description: RTC / Conversation Service related configuration
-              properties:
-                webhooks:
-                  type: object
-                  properties:
-                    event_url:
-                      type: object
-                      properties:
-                        address:
-                          type: string
-                          example: https://example.com/webhooks/event
-                        http_method:
-                          type: string
-                          example: POST
-            vbc:
-              type: object
-              description: "Specify the `vbc` capability to enable zero-rated calls for VBC number programmability service applications. This is always an empty object."
+          $ref: '#/components/schemas/capabilities'
         privacy:
           type: object
           description: "Application privacy config"
@@ -824,6 +384,253 @@ components:
               type: boolean
               description: "If set to `true`, Vonage may store and use your content and data for the improvement of Vonage's AI based services and technologies."
               example: true
+
+
+    capabilities:
+      type: object
+      properties:
+        messages:
+          $ref: '#/components/schemas/MessagesCapability'
+        rtc:
+          $ref: '#/components/schemas/RtcCapability'
+        voice:
+          $ref: '#/components/schemas/VoiceCapability'
+        meetings:
+          $ref: '#/components/schemas/MeetingsCapability'
+        vbc:
+          type: object
+          description: Specify the `vbc` capability to enable zero-rated calls for VBC number programmability service applications. This is always an empty object.
+        verify:
+          $ref: '#/components/schemas/VerifyCapability'
+        aistudio:
+          $ref: '#/components/schemas/AiStudioCapability'
+        bulk:
+          $ref: '#/components/schemas/BulkCapability'
+      description: Your application can use multiple products. This contains the configuration for each product. This replaces the application `type` from version 1 of the Application API.
+
+    MessagesCapability:
+      type: object
+      description: Messages / Dispatch related configuration
+      properties:
+        webhooks:
+          type: object
+          properties:
+            inbound_url:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: https://example.com/webhooks/inbound
+                  description: The URL that Vonage forwards inbound messages to on your server
+                http_method:
+                  type: string
+                  example: POST
+                  description: The HTTP method used to send inbound messages to your server
+            status_url:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: https://example.com/webhooks/status
+                  description: The URL that Vonage sends events related to your messages to
+                http_method:
+                  type: string
+                  example: POST
+                  description: The HTTP method used to send events to your server (always `POST`)
+
+    RtcCapability:
+      type: object
+      description: RTC / Conversation Service related configuration
+      properties:
+        signed_callbacks:
+          type: "boolean"
+        leg_persistence_time:
+          maximum: 31
+          minimum: 1
+          type: "integer"
+          format: "int32"
+        webhooks:
+          type: object
+          properties:
+            event_url:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: https://example.com/webhooks/event
+                http_method:
+                  type: string
+                  example: POST
+
+    VoiceCapability:
+      type: object
+      description: Voice related configuration
+      properties:
+        payment_enabled:
+          type: boolean
+        signed_callbacks:
+          type: boolean
+        conversation_ttl:
+          type: integer
+        payments:
+          type: object
+          properties:
+            gateways:
+              type: array
+              items:
+                required:
+                  - credential
+                  - type
+                type: object
+                properties:
+                  type:
+                    type: string
+                  credential:
+                    type: string
+                  mode:
+                    type: string
+        webhooks:
+          type: object
+          properties:
+            answer_url:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: https://example.com/webhooks/answer
+                  description: The URL that Vonage requests when a call is placed/received. Must return an NCCO
+                http_method:
+                  type: string
+                  example: POST
+                  description: The HTTP method used to fetch your NCCO from your `answer_url`
+                connection_timeout:
+                  type: integer
+                  description: If Vonage can't connect to the webhook URL for this specified amount of time, then Vonage makes one additional attempt to connect to the webhook endpoint. This is an integer value specified in milliseconds.
+                  example: 500
+                socket_timeout:
+                  type: integer
+                  description: If a response from the webhook URL can't be read for this specified amount of time, then Vonage makes one additional attempt to read the webhook endpoint. This is an integer value specified in milliseconds.
+                  example: 3000
+            fallback_answer_url:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: https://fallback.example.com/webhooks/answer
+                  description: |
+                    If your `answer_url` is offline or returns a HTTP error code, Vonage will make a request to a
+                    `fallback_answer_url` if it is set. This URL must return an NCCO.
+                http_method:
+                  type: string
+                  example: POST
+                  description: The HTTP method used to fetch your NCCO from your `answer_url`
+                connection_timeout:
+                  type: integer
+                  description: Connection timeout in milliseconds
+                  example: 500
+                socket_timeout:
+                  type: integer
+                  description: Reading timeout in milliseconds
+                  example: 3000
+            event_url:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: https://example.com/webhooks/event
+                  description: The URL that Vonage sends events related to your call to
+                http_method:
+                  type: string
+                  example: POST
+                  description: The HTTP method used to send events to your server
+                connection_timeout:
+                  type: integer
+                  description: If Vonage can't connect to the webhook URL for this specified amount of time, then Vonage makes one additional attempt to connect to the webhook endpoint. This is an integer value specified in milliseconds.
+                  example: 500
+                socket_timeout:
+                  type: integer
+                  description: If a response from the webhook URL can't be read for this specified amount of time, then Vonage makes one additional attempt to read the webhook endpoint. This is an integer value specified in milliseconds.
+                  example: 3000
+
+    MeetingsCapability:
+      type: object
+      description: Meetings related configuration
+      properties:
+        webhooks:
+          type: object
+          properties:
+            room_changed:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: https://example.com/webhooks/event
+                http_method:
+                  type: string
+                  example: POST
+            session_changed:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: https://example.com/webhooks/event
+                http_method:
+                  type: string
+                  example: POST
+            recording_changed:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: https://example.com/webhooks/event
+                http_method:
+                  type: string
+                  example: POST
+
+    VerifyCapability:
+      type: object
+      description: Verify related configuration
+      properties:
+        webhooks:
+          type: object
+          properties:
+            status_url:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: https://example.com/webhooks/event
+                http_method:
+                  type: string
+                  example: POST
+        version:
+          type: string
+
+    BulkCapability:
+      type: object
+      description: Bulk API related configuration
+      properties:
+        webhooks:
+          type: object
+          properties:
+            list_status_url:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: https://example.com/webhooks/event
+                http_method:
+                  type: string
+                  example: POST
+            run_status_url:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: https://example.com/webhooks/event
+                http_method:
+                  type: string
+                  example: POST
 
 x-errors:
   payload-validation:
@@ -843,3 +650,5 @@ x-errors:
   rate-limit:
     description: The request was rate limited
     resolution: The Redact API supports 170 requests per second. Reduce the frequency of your requests.
+
+

@@ -1,7 +1,7 @@
 ---
 openapi: "3.0.0"
 info:
-  version: 2.1.2
+  version: 2.1.3
   title: "Application API"
   description: |
     Vonage provides an Application API to allow management of your Vonage Applications.
@@ -402,8 +402,6 @@ components:
           description: Specify the `vbc` capability to enable zero-rated calls for VBC number programmability service applications. This is always an empty object.
         verify:
           $ref: '#/components/schemas/VerifyCapability'
-        aistudio:
-          $ref: '#/components/schemas/AiStudioCapability'
         bulk:
           $ref: '#/components/schemas/BulkCapability'
       description: Your application can use multiple products. This contains the configuration for each product. This replaces the application `type` from version 1 of the Application API.
@@ -478,9 +476,6 @@ components:
             gateways:
               type: array
               items:
-                required:
-                  - credential
-                  - type
                 type: object
                 properties:
                   type:

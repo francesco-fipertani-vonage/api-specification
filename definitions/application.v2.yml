@@ -402,8 +402,6 @@ components:
           description: Specify the `vbc` capability to enable zero-rated calls for VBC number programmability service applications. This is always an empty object.
         verify:
           $ref: '#/components/schemas/VerifyCapability'
-        bulk:
-          $ref: '#/components/schemas/BulkCapability'
       description: Your application can use multiple products. This contains the configuration for each product. This replaces the application `type` from version 1 of the Application API.
 
     MessagesCapability:
@@ -600,32 +598,6 @@ components:
                   example: POST
         version:
           type: string
-
-    BulkCapability:
-      type: object
-      description: Bulk API related configuration
-      properties:
-        webhooks:
-          type: object
-          properties:
-            list_status_url:
-              type: object
-              properties:
-                address:
-                  type: string
-                  example: https://example.com/webhooks/event
-                http_method:
-                  type: string
-                  example: POST
-            run_status_url:
-              type: object
-              properties:
-                address:
-                  type: string
-                  example: https://example.com/webhooks/event
-                http_method:
-                  type: string
-                  example: POST
 
 x-errors:
   payload-validation:
